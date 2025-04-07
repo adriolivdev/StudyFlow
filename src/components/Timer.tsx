@@ -11,8 +11,8 @@ interface TimerProps {
 }
 
 /**
- * Componente Timer para o modo Pomodoro.
- * Executa o tempo de foco, pausa fixa e toca som ao iniciar.
+ * Componente Timer com visual tecnológico.
+ * Controla tempo de foco e pausa no modo Pomodoro.
  */
 export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
   const breakTime = 5;
@@ -24,9 +24,7 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
 
   const startAudioRef = useRef<HTMLAudioElement>(null);
 
-  /**
-   * Inicia automaticamente o timer se autoStart for true
-   */
+  // Início automático do timer
   useEffect(() => {
     if (autoStart) {
       setIsRunning(true);
@@ -36,9 +34,7 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
     }
   }, [autoStart, isMuted]);
 
-  /**
-   * Contagem regressiva principal do timer
-   */
+  // Loop da contagem regressiva
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
 
@@ -52,7 +48,7 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
             setSeconds(59);
           }
         } else {
-          // Fim do tempo → troca entre foco e pausa
+          // Quando termina o tempo → alterna foco/pausa
           if (!isOnBreak) {
             setMinutes(breakTime);
             setSeconds(0);
@@ -68,9 +64,7 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
     return () => clearInterval(interval);
   }, [isRunning, minutes, seconds, isOnBreak]);
 
-  /**
-   * Inicia ou pausa manualmente o timer
-   */
+  // Alterna entre iniciar e pausar
   const toggleTimer = () => {
     const nextState = !isRunning;
     setIsRunning(nextState);
@@ -79,9 +73,7 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
     }
   };
 
-  /**
-   * Reinicia o tempo de foco
-   */
+  // Reinicia o tempo de foco
   const resetTimer = () => {
     setIsRunning(false);
     setIsOnBreak(false);
@@ -90,28 +82,28 @@ export default function Timer({ focusTime, autoStart, isMuted }: TimerProps) {
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-700 rounded p-6 text-center shadow-md max-w-sm mx-auto mt-6">
-      {/* 🔊 Som de início */}
+    <div className="bg-black/70 backdrop-blur-md border border-gray-700 rounded-2xl p-6 text-center shadow-lg max-w-sm mx-auto mt-6">
+      {/* Som de início */}
       <audio ref={startAudioRef} src={startBeep} preload="auto" />
 
-      <h2 className="text-2xl font-bold mb-4">
-        {isOnBreak ? "Pausa" : "Foco"}
+      <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
+        {isOnBreak ? "⏸️ Pausa" : "⏱️ Foco"}
       </h2>
 
-      <div className="text-6xl font-mono text-green-400 mb-4">
+      <div className="text-6xl font-mono text-[#13b83a] drop-shadow-neon mb-4">
         {formatTime(minutes)}:{formatTime(seconds)}
       </div>
 
       <div className="flex justify-center gap-4">
         <button
-          className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+          className="bg-[#13b83a] hover:bg-green-700 px-4 py-2 rounded font-semibold text-black transition"
           onClick={toggleTimer}
         >
           {isRunning ? "Pausar" : "Iniciar"}
         </button>
 
         <button
-          className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded"
+          className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded font-semibold transition"
           onClick={resetTimer}
         >
           Reiniciar
