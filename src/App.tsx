@@ -1,6 +1,5 @@
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import Footer from "./components/Footer"; // importa o footer
 
 /**
  * Componente principal do aplicativo.
@@ -16,9 +15,6 @@ export default function App() {
       <main className="flex-1">
         <Home />
       </main>
-
-      {/* Rodapé */}
-      <Footer />
     </div>
   );
 }

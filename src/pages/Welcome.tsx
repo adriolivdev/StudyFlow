@@ -89,7 +89,7 @@ export default function Welcome() {
         </p>
 
         <p className="text-gray-400 text-sm italic">
-          “Transforme disciplina em progresso – uma sessão por vez.” 🚀
+          “Transforme disciplina em progresso – uma sessão por vez.” 
         </p>
 
         {/* Nome do usuário */}

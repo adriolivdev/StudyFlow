@@ -38,5 +38,15 @@ export interface StudySession {
      * Pode ser usado futuramente para gerar histórico ou gráficos.
      */
     createdAt: Date;
+  
+    /**
+     * Número total de ciclos Pomodoro que o usuário deseja concluir na sessão.
+     */
+    totalCycles: number;
+  
+    /**
+     * Quantos ciclos o usuário já completou nessa sessão.
+     */
+    completedCycles: number;
   }
   

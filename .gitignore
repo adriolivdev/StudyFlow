@@ -1,24 +1,34 @@
-# Logs
-logs
-*.log
+# Diretório de dependências
+node_modules/
+
+# Diretório de build (gerado pelo Vite)
+dist/
+.vite/
+
+# Arquivos de log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
+*.log
+*.tmp
 
-node_modules
-dist
-dist-ssr
-*.local
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Arquivos do sistema operacional
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Pastas de configurações de IDEs
+.vscode/
+.idea/
+
+# Arquivos temporários e locais
+*.local
+*.swp
+*.swo
+
+# Cache
+.cache/

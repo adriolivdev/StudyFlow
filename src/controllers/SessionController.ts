@@ -5,25 +5,26 @@ import { StudySession } from "../models/SessionModel";
  * Atua como o "Controller" no padrão MVC.
  */
 export class SessionController {
-  // Lista onde as sessões serão armazenadas temporariamente (em memória)
   private sessions: StudySession[] = [];
 
   /**
-   * Cria uma nova sessão de estudo e adiciona à lista.
-   * 
-   * @param title - Título da sessão (ex: "Estudo de JavaScript")
-   * @param focusTime - Tempo de foco em minutos
-   * @param breakTime - Tempo de pausa em minutos
-   * @returns A nova sessão criada
+   * Cria uma nova sessão com título, tempos e ciclos.
    */
-  createSession(title: string, focusTime: number, breakTime: number): StudySession {
+  createSession(
+    title: string,
+    focusTime: number,
+    breakTime: number,
+    totalCycles: number = 1
+  ): StudySession {
     const newSession: StudySession = {
-      id: crypto.randomUUID(), // Gera um ID único
+      id: crypto.randomUUID(),
       title,
       focusTime,
       breakTime,
       completed: false,
-      createdAt: new Date()
+      createdAt: new Date(),
+      totalCycles,
+      completedCycles: 0,
     };
 
     this.sessions.push(newSession);
@@ -31,30 +32,39 @@ export class SessionController {
   }
 
   /**
-   * Retorna todas as sessões cadastradas até o momento.
-   * 
-   * @returns Lista de sessões de estudo
+   * Retorna todas as sessões cadastradas.
    */
   getAllSessions(): StudySession[] {
     return this.sessions;
   }
 
   /**
-   * Marca uma sessão como concluída, com base no ID.
-   * 
-   * @param id - ID da sessão que foi concluída
+   * Marca uma sessão como concluída.
    */
   markAsCompleted(id: string): void {
-    const session = this.sessions.find(s => s.id === id);
+    const session = this.sessions.find((s) => s.id === id);
     if (session) session.completed = true;
   }
 
   /**
-   * Remove uma sessão da lista, com base no ID.
-   * 
-   * @param id - ID da sessão que deve ser removida
+   * Incrementa o número de ciclos concluídos.
+   * Se todos os ciclos forem feitos, marca como concluída.
+   */
+  incrementCycle(id: string): void {
+    const session = this.sessions.find((s) => s.id === id);
+    if (!session || session.completed) return;
+
+    session.completedCycles += 1;
+
+    if (session.completedCycles >= session.totalCycles) {
+      session.completed = true;
+    }
+  }
+
+  /**
+   * Deleta uma sessão da lista.
    */
   deleteSession(id: string): void {
-    this.sessions = this.sessions.filter(s => s.id !== id);
+    this.sessions = this.sessions.filter((s) => s.id !== id);
   }
 }
