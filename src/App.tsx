@@ -8,18 +8,29 @@ import Home from "./pages/Home";
  * Define as rotas e renderiza o cabeçalho e conteúdo conforme a página.
  */
 export default function App() {
+  const userName = localStorage.getItem("studyFlowUserName");
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
       <Router>
-        {/* Cabeçalho fixo */}
+        {/* Cabeçalho visível em todas as rotas */}
         <Header />
 
-        {/* Rotas principais */}
         <main className="flex-1">
           <Routes>
+            {/* Rota inicial redireciona para welcome */}
             <Route path="/" element={<Navigate to="/welcome" replace />} />
+
+            {/* Página de boas-vindas */}
             <Route path="/welcome" element={<Welcome />} />
-            <Route path="/home" element={<Home />} />
+
+            {/* Página home só acessível se o nome foi preenchido */}
+            <Route
+              path="/home"
+              element={
+                userName ? <Home /> : <Navigate to="/welcome" replace />
+              }
+            />
           </Routes>
         </main>
       </Router>
