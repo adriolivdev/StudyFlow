@@ -45,7 +45,10 @@ Utilizei o padrão **MVC (Model-View-Controller)** dentro do React:
 
 ## 📸 Tela atual
 
-![Tela inicial do app](./public/preview-studyflow.png)
+![image](https://github.com/user-attachments/assets/0330bccc-3649-455a-b1ae-1dfc33c7c933)
+![image](https://github.com/user-attachments/assets/785f3901-26ad-41f3-b629-8f62434d3fad)
+
+
 
 ---
 
