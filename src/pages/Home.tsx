@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { SessionController } from "../controllers/SessionController";
 import { StudySession } from "../models/SessionModel";
 
-import Header from "../components/Header";
 import Timer from "../components/Timer";
 import SessionCard from "../components/SessionCard";
 import ConfettiAnimation from "../components/ConfettiAnimation";
@@ -119,8 +118,6 @@ export default function Home() {
       )}
 
       <div className="relative z-10">
-        <Header />
-
         <div className="max-w-2xl mx-auto p-4 bg-black/60 backdrop-blur-md rounded-xl shadow-xl mt-6">
           <button
             className="text-sm mb-4 bg-gray-700 px-3 py-1 rounded hover:bg-gray-600"
@@ -197,9 +194,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-400 z-10">
-        © 2025 · Desenvolvido por <span className="text-[#13b83a] font-mono">adriolivdev &lt;/&gt;</span>
+        © 2025 · Desenvolvido por{" "}
+        <span className="text-[#13b83a] font-mono">adriolivdev &lt;/&gt;</span>
       </footer>
     </div>
   );
