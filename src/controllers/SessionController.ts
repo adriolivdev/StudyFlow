@@ -8,17 +8,26 @@ export class SessionController {
   private sessions: StudySession[] = [];
 
   /**
-   * Cria uma nova sessão com título, tempos e ciclos.
+   * Cria uma nova sessão com título, tempos, ciclos e categoria.
+   * 
+   * @param title - Título da sessão de estudo.
+   * @param focusTime - Tempo de foco (em minutos).
+   * @param breakTime - Tempo de pausa (em minutos).
+   * @param totalCycles - Quantidade de ciclos Pomodoro (padrão: 1).
+   * @param category - Categoria da sessão (ex: "Front-End", "Python").
+   * @returns A sessão criada.
    */
   createSession(
     title: string,
     focusTime: number,
     breakTime: number,
-    totalCycles: number = 1
+    totalCycles: number = 1,
+    category: string = ""
   ): StudySession {
     const newSession: StudySession = {
       id: crypto.randomUUID(),
       title,
+      category, // ✅ nova propriedade incluída aqui
       focusTime,
       breakTime,
       completed: false,
