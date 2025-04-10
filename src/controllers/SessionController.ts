@@ -8,13 +8,14 @@ export class SessionController {
   private sessions: StudySession[] = [];
 
   /**
-   * Cria uma nova sessão com título, tempos, ciclos e categoria.
+   * Cria uma nova sessão com título, tempos, ciclos, categoria e cor da categoria.
    * 
    * @param title - Título da sessão de estudo.
    * @param focusTime - Tempo de foco (em minutos).
    * @param breakTime - Tempo de pausa (em minutos).
    * @param totalCycles - Quantidade de ciclos Pomodoro (padrão: 1).
    * @param category - Categoria da sessão (ex: "Front-End", "Python").
+   * @param categoryColor - Cor associada à categoria (em hex, ex: "#13b83a").
    * @returns A sessão criada.
    */
   createSession(
@@ -22,12 +23,14 @@ export class SessionController {
     focusTime: number,
     breakTime: number,
     totalCycles: number = 1,
-    category: string = ""
+    category: string = "",
+    categoryColor: string = ""
   ): StudySession {
     const newSession: StudySession = {
       id: crypto.randomUUID(),
       title,
-      category, // ✅ nova propriedade incluída aqui
+      category, // ✅ categoria definida
+      categoryColor, // ✅ cor da categoria definida
       focusTime,
       breakTime,
       completed: false,

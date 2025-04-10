@@ -23,6 +23,12 @@ export interface StudySession {
   category: string;
 
   /**
+   * Cor associada à categoria, usada nos gráficos.
+   * Formato esperado: hexadecimal (ex: "#13b83a").
+   */
+  categoryColor?: string;
+
+  /**
    * Tempo de foco da sessão em minutos.
    * Indica quanto tempo o usuário pretende estudar sem interrupções.
    */
