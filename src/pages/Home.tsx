@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { SessionController } from "../controllers/SessionController";
 import { StudySession } from "../models/SessionModel";
-
 import Timer from "../components/Timer";
 import SessionCard from "../components/SessionCard";
 import ConfettiAnimation from "../components/ConfettiAnimation";
@@ -30,13 +29,15 @@ export default function Home() {
   const [motivationalMessage, setMotivationalMessage] = useState("");
   const [isMuted, setIsMuted] = useState<boolean>(() => localStorage.getItem("studyFlowMuted") === "true");
   const [userName] = useState(() => localStorage.getItem("studyFlowUserName") || "");
+
   const vantaRef = useRef(null);
   const sessionCompleteAudio = new Audio(sessionCompleteSound);
   const sessionController = new SessionController();
 
-  const [showCharts, setShowCharts] = useState(false);
+  const [showCharts, setShowCharts] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
+
   const toggleDay = (dayIndex: number) => {
     setSelectedDays((prev) =>
       prev.includes(dayIndex) ? prev.filter((d) => d !== dayIndex) : [...prev, dayIndex]
@@ -91,6 +92,7 @@ export default function Home() {
     setShowConfetti(true);
     setMotivationalMessage(getRandomQuote());
     setActiveSession(null);
+
     if (!isMuted) {
       sessionCompleteAudio.currentTime = 0;
       sessionCompleteAudio.play().catch(() => {});
@@ -140,31 +142,29 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="space-y-4">
+          {/* Campos com labels agora */}
+          <div className="space-y-3">
             <div>
-              <label className="text-sm text-gray-300">Título da sessão:</label>
-              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex: Estudo de JavaScript" />
+              <label className="text-sm">📌 Título da Sessão</label>
+              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
-
             <div>
-              <label className="text-sm text-gray-300">Categoria:</label>
-              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Ex: Front-End" />
+              <label className="text-sm">🏷️ Categoria</label>
+              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={category} onChange={(e) => setCategory(e.target.value)} />
             </div>
-
             <div>
-              <label className="text-sm text-gray-300">Duração de cada ciclo (min):</label>
-              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={focusTime} onChange={(e) => setFocusTime(Number(e.target.value))} min={5} max={180} />
+              <label className="text-sm">⏱️ Duração do Ciclo (min):</label>
+              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={focusTime} onChange={(e) => setFocusTime(Number(e.target.value))} />
             </div>
-
             <div>
-              <label className="text-sm text-gray-300">Ciclos Pomodoro:</label>
-              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={totalCycles} onChange={(e) => setTotalCycles(Number(e.target.value))} min={1} max={10} />
+              <label className="text-sm">🔁 Ciclos Pomodoro:</label>
+              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={totalCycles} onChange={(e) => setTotalCycles(Number(e.target.value))} />
             </div>
-
-            <button className="bg-green-600 hover:bg-green-700 w-full py-2 rounded font-semibold tracking-wide" onClick={handleCreateSession}>
-              🚀 Criar Sessão
-            </button>
           </div>
+
+          <button className="bg-green-600 hover:bg-green-700 w-full py-2 mt-4 rounded font-semibold tracking-wide" onClick={handleCreateSession}>
+            🚀 Criar Sessão
+          </button>
 
           {activeSession && (
             <Timer
@@ -178,32 +178,29 @@ export default function Home() {
 
           {motivationalMessage && (
             <p className="text-center text-green-400 font-semibold mt-4 text-lg">
-              {userName ? `Parabéns, ${userName}! ` : ""}
-              {motivationalMessage}
+              {userName ? `Parabéns, ${userName}! ` : ""}{motivationalMessage}
             </p>
           )}
 
           <div className="space-y-4 mt-6">
             {sessions.map((session) => (
-              <SessionCard
-                key={session.id}
-                session={session}
-                onComplete={handleComplete}
-                onDelete={handleDelete}
-                onStart={handleStartSession}
-              />
+              <SessionCard key={session.id} session={session} onComplete={handleComplete} onDelete={handleDelete} onStart={handleStartSession} />
             ))}
           </div>
 
+          {/* Botão sempre visível abaixo da lista de sessões */}
           {sessions.length > 0 && (
-            <button
-              onClick={() => setShowCharts(!showCharts)}
-              className="mt-8 mb-4 w-full bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-semibold"
-            >
-              {showCharts ? "🔽 Ocultar Estatísticas" : "📊 Ver Estatísticas"}
-            </button>
+            <div className="mt-8 mb-4">
+              <button
+                onClick={() => setShowCharts(!showCharts)}
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-semibold"
+              >
+                {showCharts ? "🔽 Ocultar Estatísticas" : "📊 Ver Estatísticas"}
+              </button>
+            </div>
           )}
 
+          {/* Gráficos + Filtros */}
           {showCharts && (
             <>
               <div className="bg-gray-800 p-4 rounded-lg space-y-4 mb-6">
@@ -212,13 +209,10 @@ export default function Home() {
                   <select className="w-full mt-1 p-2 rounded bg-gray-700 border border-gray-600 text-white" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">Todas</option>
                     {[...new Set(sessions.map((s) => s.category))].map((cat, idx) => (
-                      <option key={idx} value={cat}>
-                        {cat || "Sem Categoria"}
-                      </option>
+                      <option key={idx} value={cat}>{cat || "Sem Categoria"}</option>
                     ))}
                   </select>
                 </div>
-
                 <div>
                   <label className="text-sm font-semibold text-gray-300">Filtrar por Dia da Semana:</label>
                   <div className="flex flex-wrap gap-3 mt-2 text-sm text-white">
