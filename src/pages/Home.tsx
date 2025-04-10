@@ -1,4 +1,3 @@
-// Home.tsx
 import { useEffect, useState, useRef } from "react";
 import { SessionController } from "../controllers/SessionController";
 import { StudySession } from "../models/SessionModel";
@@ -119,7 +118,12 @@ export default function Home() {
 
   return (
     <div ref={vantaRef} className="min-h-screen bg-black text-white relative overflow-hidden flex flex-col">
-      {showConfetti && <div className="fixed inset-0 z-[9999] pointer-events-none"><ConfettiAnimation /></div>}
+      {showConfetti && (
+        <div className="fixed inset-0 z-[9999] pointer-events-none">
+          <ConfettiAnimation />
+        </div>
+      )}
+
       <div className="relative z-10 flex-grow">
         <div className="max-w-2xl mx-auto p-4 bg-black/60 backdrop-blur-md rounded-xl shadow-xl mt-6">
           <div className="flex justify-between items-center mb-4">
@@ -137,18 +141,58 @@ export default function Home() {
           </div>
 
           <div className="space-y-4">
-            <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" placeholder="Título da sessão" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" placeholder="Categoria" value={category} onChange={(e) => setCategory(e.target.value)} />
-            <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={focusTime} onChange={(e) => setFocusTime(Number(e.target.value))} />
-            <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={totalCycles} onChange={(e) => setTotalCycles(Number(e.target.value))} />
-            <button className="bg-green-600 hover:bg-green-700 w-full py-2 rounded font-semibold tracking-wide" onClick={handleCreateSession}>🚀 Criar Sessão</button>
+            <div>
+              <label className="text-sm text-gray-300">Título da sessão:</label>
+              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex: Estudo de JavaScript" />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-300">Categoria:</label>
+              <input className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Ex: Front-End" />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-300">Duração de cada ciclo (min):</label>
+              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={focusTime} onChange={(e) => setFocusTime(Number(e.target.value))} min={5} max={180} />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-300">Ciclos Pomodoro:</label>
+              <input type="number" className="w-full p-2 rounded bg-gray-800 border border-gray-600" value={totalCycles} onChange={(e) => setTotalCycles(Number(e.target.value))} min={1} max={10} />
+            </div>
+
+            <button className="bg-green-600 hover:bg-green-700 w-full py-2 rounded font-semibold tracking-wide" onClick={handleCreateSession}>
+              🚀 Criar Sessão
+            </button>
           </div>
 
-          {activeSession && <Timer focusTime={activeSession.focusTime} autoStart={shouldStart} isMuted={isMuted} sessionId={activeSession.id} onCycleComplete={() => handleComplete(activeSession.id)} />}
-          {motivationalMessage && <p className="text-center text-green-400 font-semibold mt-4 text-lg">{userName ? `Parabéns, ${userName}! ` : ""}{motivationalMessage}</p>}
+          {activeSession && (
+            <Timer
+              focusTime={activeSession.focusTime}
+              autoStart={shouldStart}
+              isMuted={isMuted}
+              sessionId={activeSession.id}
+              onCycleComplete={() => handleComplete(activeSession.id)}
+            />
+          )}
+
+          {motivationalMessage && (
+            <p className="text-center text-green-400 font-semibold mt-4 text-lg">
+              {userName ? `Parabéns, ${userName}! ` : ""}
+              {motivationalMessage}
+            </p>
+          )}
 
           <div className="space-y-4 mt-6">
-            {sessions.map((session) => <SessionCard key={session.id} session={session} onComplete={handleComplete} onDelete={handleDelete} onStart={handleStartSession} />)}
+            {sessions.map((session) => (
+              <SessionCard
+                key={session.id}
+                session={session}
+                onComplete={handleComplete}
+                onDelete={handleDelete}
+                onStart={handleStartSession}
+              />
+            ))}
           </div>
 
           {sessions.length > 0 && (
@@ -167,11 +211,14 @@ export default function Home() {
                   <label className="text-sm font-semibold text-gray-300">Filtrar por Categoria:</label>
                   <select className="w-full mt-1 p-2 rounded bg-gray-700 border border-gray-600 text-white" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="">Todas</option>
-                    {[...new Set(sessions.map(s => s.category))].map((cat, idx) => (
-                      <option key={idx} value={cat}>{cat || "Sem Categoria"}</option>
+                    {[...new Set(sessions.map((s) => s.category))].map((cat, idx) => (
+                      <option key={idx} value={cat}>
+                        {cat || "Sem Categoria"}
+                      </option>
                     ))}
                   </select>
                 </div>
+
                 <div>
                   <label className="text-sm font-semibold text-gray-300">Filtrar por Dia da Semana:</label>
                   <div className="flex flex-wrap gap-3 mt-2 text-sm text-white">
@@ -184,12 +231,14 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
               <PerformanceChart sessions={filteredSessions} />
               <UnifiedChart sessions={filteredSessions} />
             </>
           )}
         </div>
       </div>
+
       <footer className="mt-16 text-center text-sm text-gray-400 z-10 py-6">
         © 2025 · Desenvolvido por <span className="text-[#13b83a] font-mono">adriolivdev &lt;/&gt;</span>
       </footer>
